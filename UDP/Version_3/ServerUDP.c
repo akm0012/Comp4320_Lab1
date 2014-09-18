@@ -5,8 +5,8 @@
 *	Author: Andrew K. Marshall (akm0012)
 *	Group ID: 15
 *	Date: 9/17/14
-*	Version: 0.2
-*	Version Notes: Server is able to receive a package, then echo it back.
+*	Version: 0.3
+*	Version Notes: 
 */
 
 #include <stdio.h>
