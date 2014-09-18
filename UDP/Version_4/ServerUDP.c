@@ -4,10 +4,9 @@
 *	File: ServerUDP.c	
 *	Author: Andrew K. Marshall (akm0012)
 *	Group ID: 15
-*	Date: 9/18/14
+*	Date: 9/17/14
 *	Version: 0.3
-*	Version Notes: This version can receive a char stream and automatically put them into a struct. 
-*	               It can also send an echo back using that struct. Pretty cool stuff!  
+*	Version Notes: 
 */
 
 #include <stdio.h>
