@@ -24,9 +24,24 @@ class UDPClient {
 		int operation = Integer.parseInt(args[2]);
 		String message = args[3];
 		
-		byte[] sendData = new byte[message.length() + 5];
-		sendData[0] = (byte) (message.length() & 0xFF);
-		sendData[1] = (byte) ((message.length() >> 8) & 0xFF);
+		//a 5 byte header that goes befor the message.
+		byte[] header = new byte[5];
+		
+		//TML - TotalMessageLength
+		header[0] = (byte) (message.length() & 0xFF);
+		header[1] = (byte) ((message.length() >> 8) & 0xFF);
+		
+		//Request ID
+		header[2] = 0;
+		header[3] = 1;
+		
+		//operation
+		header[4] = (byte) (operation & 0xFF);
+		
+		byte[] sendData = new byte[5+message.length()];
+		
+		//attach the two arrays.
+		System.arraycopy(DatatypeConverter.parseHexBinary(message), 0, sendData, 5, message.length());
 
 		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(
 				System.in));
@@ -36,10 +51,10 @@ class UDPClient {
 		byte[] receiveData = new byte[1024];
 
 		String sentence = inFromUser.readLine();
-		sendData = sentence.getBytes();
+		header = sentence.getBytes();
 
-		DatagramPacket sendPacket = new DatagramPacket(sendData,
-				sendData.length, IPAddress, portNumber);
+		DatagramPacket sendPacket = new DatagramPacket(header,
+				header.length, IPAddress, portNumber);
 		clientSocket.send(sendPacket);
 
 		DatagramPacket receivePacket = new DatagramPacket(receiveData,
