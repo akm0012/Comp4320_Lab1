@@ -28,6 +28,29 @@ struct packet_to_send
 
 typedef struct packet_to_send tx_packet;
 
+typedef struct received_packet rx_packet;	
+	
+
+// Struct that will be sent to the client, if client requested vLength
+struct transmitted_packet_vLength
+{
+	unsigned short TML;	// Total Message Length (2 bytes)
+	unsigned short RID;	// Request ID (2 bytes)
+	unsigned short vLength;	// The number of vowels 
+}__attribute__((__packed__));	
+
+typedef struct transmitted_packet_vLength tx_vLength;
+
+// Struct that will be sent to the client, if client requested diemvowelment
+struct transmitted_packet_disemvowel
+{
+	unsigned short TML;	// Total Message Length (2 bytes)
+	unsigned short RID;	// Request ID (2 bytes)
+	char message[MAX_MESSAGE_LEN];	// The number of vowels 
+}__attribute__((__packed__));	
+
+typedef struct transmitted_packet_disemvowel tx_disVowel;
+
 int main(int argc, char *argv[])
 {
     int sockfd;
@@ -45,7 +68,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    memset(&hints, 0, sizeof hints);
+    memset(&hints, 0, sizeof hints);	// put 0's in all the mem space for hints (clearing hints)
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_DGRAM;
 
@@ -81,10 +104,11 @@ int main(int argc, char *argv[])
     }
 
 	// Creating the struct to send!!
-	int tml = 10;
+	int tml = 26; // Include NULL '\0'
 	int rid = 1;
-	char op = 85; // 85 (0x55)= vLength (need to make this a constant), 170 (0xAA) = disemvowelment
-	char message_in[] = "Hello";
+	char op = 170; // 85 (0x55)= vLength (need to make this a constant), 170 (0xAA) = disemvowelment
+	char message_in[] = "AHelloMyNameIsAndrewA";
+	//char message_in[] = "g";
 
 	tx_packet test_packet;
 	test_packet.TML = htons(tml);
@@ -95,7 +119,7 @@ int main(int argc, char *argv[])
 
    // if ((numbytes_tx = sendto(sockfd, argv[2], strlen(argv[2]), 0,
     //         p->ai_addr, p->ai_addrlen)) == -1) {
-	if ((numbytes_tx = sendto(sockfd, (char *)&test_packet, test_packet.TML, 0, 
+	if ((numbytes_tx = sendto(sockfd, (char *)&test_packet, ntohs(test_packet.TML), 0, 
 		p->ai_addr, p->ai_addrlen)) == -1) 
 	{    
 		perror("talker: sendto");
@@ -111,8 +135,10 @@ int main(int argc, char *argv[])
 	printf("talker: waiting for conformation echo...\n");
 
 	addr_len = sizeof their_addr;
+if(0) {
+	tx_vLength tx_v_pac;
 
-	if ((numbytes_rx = recvfrom(sockfd, buf, MAXBUFLEN-1, 0, 
+	if ((numbytes_rx = recvfrom(sockfd,(char *) &tx_v_pac, 1029, 0, 
 		(struct sockaddr *)&their_addr, &addr_len)) == -1)
 	//if ((numbytes_rx = recvfrom(sockfd, buf, MAXBUFLEN-1, 0, 
 	//	p->ai_addr, p->ai_addrlen)) == -1)
@@ -123,9 +149,28 @@ int main(int argc, char *argv[])
 
 	printf("talker: received echo, packet is %d bytes long.\n", numbytes_rx);
 
-	buf[numbytes_rx] = '\0';
-	
-	printf("talker: echo packet contains: \"%s\"\n", buf);
+	printf("tx_v_pac.TML = %d\n", ntohs(tx_v_pac.TML));
+	printf("tx_v_pac.RID = %d\n", ntohs(tx_v_pac.RID));
+	printf("tx_v_pac.vLength = %d\n", ntohs(tx_v_pac.vLength));
+}	
+if(1) {
+	tx_disVowel tx_dV_pac;
+
+	if ((numbytes_rx = recvfrom(sockfd,(char *) &tx_dV_pac, 1029, 0, 
+		(struct sockaddr *)&their_addr, &addr_len)) == -1)
+	//if ((numbytes_rx = recvfrom(sockfd, buf, MAXBUFLEN-1, 0, 
+	//	p->ai_addr, p->ai_addrlen)) == -1)
+	{
+		perror("recvfrom");
+		exit(1);
+	}
+
+	printf("talker: received echo, packet is %d bytes long.\n", numbytes_rx);
+
+	printf("tx_dV_pac.TML = %d\n", ntohs(tx_dV_pac.TML));
+	printf("tx_dV_pac.RID = %d\n", ntohs(tx_dV_pac.RID));
+	printf("tx_dV_pac.message = %s\n", tx_dV_pac.message);
+}
 
     freeaddrinfo(servinfo);
 	close(sockfd);
