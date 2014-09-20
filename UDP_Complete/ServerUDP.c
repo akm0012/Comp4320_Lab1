@@ -7,7 +7,7 @@
 *	Date: 9/18/14
 *	Version: 1.0
 *	Version Notes: This version is able to read from the client, and then return a 
-*	               packet with the correct responce. 
+*	               packet with the correct response. 
 */
 
 #include <stdio.h>

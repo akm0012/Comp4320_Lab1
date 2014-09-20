@@ -23,7 +23,7 @@ class UDPClient {
 		int portNumber = Integer.parseInt(args[1]);
 		int operation = Integer.parseInt(args[2]);
 		String message = args[3];
-		
+
 		//a 5 byte header that goes befor the message.
 		byte[] header = new byte[5];
 		
