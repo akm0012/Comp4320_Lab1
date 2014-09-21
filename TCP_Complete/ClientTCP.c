@@ -29,7 +29,7 @@
 #define V_LENGTH 85	// Operation: Count vowels
 #define DISEMVOWEL 170	// Operation: Remove vowels
 
-#define DEBUG 1	// Used for debugging: 1 = ON; 0 = OFF
+#define DEBUG 0	// Used for debugging: 1 = ON; 0 = OFF
 
 // Prototypes
 int count_vowels(char*);
@@ -92,23 +92,27 @@ int main(int argc, char *argv[])
 	unsigned char operation;
 	char* message_in;
 	
-	if (argc != 5) 
+	// Used for timing
+	clock_t start_time, end_time;
+	
+	if (argc != 6) 
 	{
 		fprintf(stderr, "Usage Error: Params\n");
 		exit(1);
 	}
 
 	// Get the params from command line
-	hostname = argv[1];
-	port = argv[2];
-	operation = (unsigned char)atoi(argv[3]);
-	message_in = argv[4];
+	hostname = argv[2];
+	port = argv[3];
+	operation = (unsigned char)atoi(argv[4]);
+	message_in = argv[5];
 
 	if (DEBUG) {
-		printf("argv[1] or hostname: %s\n", argv[1]);
-		printf("argv[2] or port: %s\n", argv[2]);
-		printf("argv[3] or operation: %s\n", argv[3]);
-		printf("argv[4] or message: %s\n", argv[4]);
+		printf("argv[1] or client: %s\n", argv[1]);
+		printf("argv[2] or hostname: %s\n", argv[2]);
+		printf("argv[3] or port: %s\n", argv[3]);
+		printf("argv[4] or operation: %s\n", argv[4]);
+		printf("argv[5] or message: %s\n", argv[5]);
 	}
 
 	memset(&hints, 0, sizeof hints);
@@ -171,17 +175,25 @@ int main(int argc, char *argv[])
 	if (DEBUG) {
 		printf("packet_out.TML: %d\n", ntohs(packet_out.TML));
 		printf("packet_out.RID: %d\n", ntohs(packet_out.RID));
-		printf("packet_out.TML: %d\n", packet_out.operation);
-		printf("packet_out.TML: %s\n", packet_out.message);
+		printf("packet_out.operation: %d\n", packet_out.operation);
+		printf("packet_out.message: %s\n", packet_out.message);
 	}
 
+	// Start the timer
+	start_time = clock();
+	
 	if (send(sockfd, (char *)&packet_out, ntohs(packet_out.TML), 0) == -1)
 	{
 		perror("Send Error");
 	}
 
+	printf("---------------------------\n");
+	printf("Request Sent!\n");
+	printf("Request ID: %d\n", ntohs(packet_out.RID));
+	printf("---------------------------\n");
+
 	// Depending on the operation we requested will decide what kind of packet we will recieve
-	
+		
 	// vLength was requested
 	if (operation == V_LENGTH)
 	{
@@ -197,12 +209,19 @@ int main(int argc, char *argv[])
 			exit(1);
 		}
 
+		// End the timer
+		end_time = clock() - start_time;
+		
 		if(DEBUG) {
 			printf("Packet Recieved!\n");
 			printf("packet_in_vLength.TML: %d\n", ntohs(packet_in_vLength.TML));
 			printf("packet_in_vLength.RID: %d\n", ntohs(packet_in_vLength.RID));
 			printf("packet_in_vLength.vLength: %d\n", ntohs(packet_in_vLength.vLength));
 		}
+
+		printf("Response received from server!\n");
+		printf("Request ID: %d\n", ntohs(packet_in_vLength.RID));
+		printf("Number of Vowels: %d\n", packet_in_vLength.vLength);
 	}
 
 	// disVowel was requested
@@ -220,6 +239,9 @@ int main(int argc, char *argv[])
 			exit(1);
 		}
 
+		// End the timer
+		end_time = clock() - start_time;
+		
 		// Add the null terminator, just in case. -4 becuase of header
 		packet_in_disVowel.message[numbytes_rec_disVowel - 4] = '\0';
 
@@ -229,7 +251,14 @@ int main(int argc, char *argv[])
 			printf("packet_in_disVowel.RID: %d\n", ntohs(packet_in_disVowel.RID));
 			printf("packet_in_disVowel.message: %s\n", packet_in_disVowel.message);
 		}
+		
+		printf("Response received from server!\n");
+		printf("Request ID: %d\n", ntohs(packet_in_disVowel.RID));
+		printf("Disemvoweled String: %s\n", packet_in_disVowel.message);
 	}
+
+	printf("Total round trip time: %f seconds.\n", ((float)end_time)/CLOCKS_PER_SEC);
+	printf("---------------------------\n");
 
 	close(sockfd);
 
