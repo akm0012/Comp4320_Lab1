@@ -28,8 +28,8 @@ Run Instructions:
 
 To run the UDP server/client type:
 
-	./ServerUDP.exe server [PORT NUMBER]
-	java ClientUDP client [HOST NAME] [PORT NUMBER] [OPERATION] [MESSAGE]
+	./ServerUDP.exe "server" [PORT NUMBER]
+	java ClientUDP "client" [HOST NAME] [PORT NUMBER] [OPERATION] [MESSAGE]
 
 Example:
 
@@ -38,8 +38,8 @@ Example:
 
 To run the TCP server/client type:
 
-	java ServerTCP server [PORT NUMBER]
-	./ClientTCP.exe client [HOST NAME] [PORT NUMBER] [OPERATION] [MESSAGE]
+	java ServerTCP "server" [PORT NUMBER]
+	./ClientTCP.exe "client" [HOST NAME] [PORT NUMBER] [OPERATION] [MESSAGE]
 
 Example:
 

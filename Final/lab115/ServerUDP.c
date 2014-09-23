@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 	// Check to make sure the command line arguments are valid
 	if (argc != 3) 
 	{
-		fprintf(stderr, "Usage Error: Should be 2 arguments: 'client' and the port number.\n");
+		fprintf(stderr, "Usage Error: Should be 2 arguments: 'server' and the port number.\n");
 		exit(1);
 	}
 
@@ -333,7 +333,7 @@ char* disemvowel(char* string_in)
 	int i = 0;
 	int j = 0;
 
-	for (i; i < strlen(string_in); i++)
+	for (i = 0; i < strlen(string_in); i++)
 	{
 
 		if(0) {

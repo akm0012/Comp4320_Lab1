@@ -93,7 +93,8 @@ int main(int argc, char *argv[])
 	char* message_in;
 	
 	// Used for timing
-	clock_t start_time, end_time;
+	struct timeval start, end;
+	long mtime, seconds, useconds;
 	
 	if (argc != 6) 
 	{
@@ -180,8 +181,8 @@ int main(int argc, char *argv[])
 	}
 
 	// Start the timer
-	start_time = clock();
-	
+	gettimeofday(&start, NULL);
+
 	if (send(sockfd, (char *)&packet_out, ntohs(packet_out.TML), 0) == -1)
 	{
 		perror("Send Error");
@@ -210,8 +211,8 @@ int main(int argc, char *argv[])
 		}
 
 		// End the timer
-		end_time = clock() - start_time;
-		
+		gettimeofday(&end, NULL);		
+
 		if(DEBUG) {
 			printf("Packet Recieved!\n");
 			printf("packet_in_vLength.TML: %d\n", ntohs(packet_in_vLength.TML));
@@ -240,7 +241,7 @@ int main(int argc, char *argv[])
 		}
 
 		// End the timer
-		end_time = clock() - start_time;
+		gettimeofday(&end, NULL);		
 		
 		// Add the null terminator, just in case. -4 becuase of header
 		packet_in_disVowel.message[numbytes_rec_disVowel - 4] = '\0';
@@ -257,7 +258,9 @@ int main(int argc, char *argv[])
 		printf("Disemvoweled String: %s\n", packet_in_disVowel.message);
 	}
 
-	printf("Total round trip time: %f seconds.\n", ((float)end_time)/CLOCKS_PER_SEC);
+	useconds = end.tv_usec - start.tv_usec;
+
+	printf("Total round trip time: %ld micro seconds.\n", useconds);
 	printf("---------------------------\n");
 
 	close(sockfd);
