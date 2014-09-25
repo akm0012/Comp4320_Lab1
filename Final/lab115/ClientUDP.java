@@ -22,14 +22,13 @@ class ClientUDP {
     public static void main(String args[]) throws Exception { 
         long startTime = System.nanoTime();
  
-	String client_check = args[0];
-        String serverName = args[1]; 
-        int portNumber = Integer.parseInt(args[2]); 
-        int operation = Integer.parseInt(args[3]); 
+        String serverName = args[0]; 
+        int portNumber = Integer.parseInt(args[1]); 
+        int operation = Integer.parseInt(args[2]); 
          
         Random random = new Random(); 
         int rid = random.nextInt(255); 
-        String message = args[4]; 
+        String message = args[3]; 
  
         //a 5 byte header that goes befor the message. 
         byte[] header = new byte[5]; 

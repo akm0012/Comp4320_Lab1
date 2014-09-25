@@ -4,9 +4,9 @@
 *	File: ClientTCP.c	
 *	Author: Andrew K. Marshall (akm0012)
 *	Group ID: 15
-*	Date: 9/20/14
+*	Date: 9/24/14
 *	Version: 0.1
-*	Version Notes: Everything working. Excpet time tracking.  
+*	Version Notes: Everything working.   
 */
 
 #include <stdio.h>
@@ -96,24 +96,23 @@ int main(int argc, char *argv[])
 	struct timeval start, end;
 	long mtime, seconds, useconds;
 	
-	if (argc != 6) 
+	if (argc != 5) 
 	{
 		fprintf(stderr, "Usage Error: Params\n");
 		exit(1);
 	}
 
 	// Get the params from command line
-	hostname = argv[2];
-	port = argv[3];
-	operation = (unsigned char)atoi(argv[4]);
-	message_in = argv[5];
+	hostname = argv[1];
+	port = argv[2];
+	operation = (unsigned char)atoi(argv[3]);
+	message_in = argv[4];
 
 	if (DEBUG) {
-		printf("argv[1] or client: %s\n", argv[1]);
-		printf("argv[2] or hostname: %s\n", argv[2]);
-		printf("argv[3] or port: %s\n", argv[3]);
-		printf("argv[4] or operation: %s\n", argv[4]);
-		printf("argv[5] or message: %s\n", argv[5]);
+		printf("argv[1] or hostname: %s\n", argv[1]);
+		printf("argv[2] or port: %s\n", argv[2]);
+		printf("argv[3] or operation: %s\n", argv[3]);
+		printf("argv[4] or message: %s\n", argv[4]);
 	}
 
 	memset(&hints, 0, sizeof hints);

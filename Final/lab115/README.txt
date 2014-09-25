@@ -28,23 +28,23 @@ Run Instructions:
 
 To run the UDP server/client type:
 
-	./ServerUDP.exe "server" [PORT NUMBER]
-	java ClientUDP "client" [HOST NAME] [PORT NUMBER] [OPERATION] [MESSAGE]
+	./ServerUDP.exe [PORT NUMBER]
+	java ClientUDP [HOST NAME] [PORT NUMBER] [OPERATION] [MESSAGE]
 
 Example:
 
-	./ServerUDP.exe server 10025
-	java ClientUDP client 127.0.0.1 10025 170 ThisIsATest
+	./ServerUDP.exe 10025
+	java ClientUDP 127.0.0.1 10025 170 ThisIsATest
 
 To run the TCP server/client type:
 
-	java ServerTCP "server" [PORT NUMBER]
-	./ClientTCP.exe "client" [HOST NAME] [PORT NUMBER] [OPERATION] [MESSAGE]
+	java ServerTCP [PORT NUMBER]
+	./ClientTCP.exe [HOST NAME] [PORT NUMBER] [OPERATION] [MESSAGE]
 
 Example:
 
-	java ServerTCP server 10025
-	./ClientTCP.exe client 127.0.0.1 10025 170 ThisIsATest
+	java ServerTCP 10025
+	./ClientTCP.exe 127.0.0.1 10025 170 ThisIsATest
 -----------------------------------------------------------------
 
 Known Bugs:

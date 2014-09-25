@@ -15,9 +15,9 @@ public class ServerTCP {
   { 
 	int serverPort = 10025;
 	if (args.length > 0) {
-		if (args.length == 2 && args[0].toLowerCase().equals("server")) {
+		if (args.length == 1) {
 			try {
-				serverPort = Integer.parseInt(args[1]);
+				serverPort = Integer.parseInt(args[0]);
 			}
 			catch (Exception e) {
 				throw new IllegalArgumentException("Parameter(s): \"server\" <Port>");

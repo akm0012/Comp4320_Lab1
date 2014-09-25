@@ -4,7 +4,7 @@
 *	File: ServerUDP.c	
 *	Author: Andrew K. Marshall (akm0012)
 *	Group ID: 15
-*	Date: 9/18/14
+*	Date: 9/24/14
 *	Version: 1.0
 *	Version Notes: This version is able to read from the client, and then return a 
 *	               packet with the correct response. 
@@ -99,14 +99,14 @@ int main(int argc, char *argv[])
 	hints.ai_flags = AI_PASSIVE;	// use my IP
 
 	// Check to make sure the command line arguments are valid
-	if (argc != 3) 
+	if (argc != 2) 
 	{
-		fprintf(stderr, "Usage Error: Should be 2 arguments: 'server' and the port number.\n");
+		fprintf(stderr, "Usage Error: Should be 1 argument: the port number.\n");
 		exit(1);
 	}
 
 	// Get the port number from the command line
-	my_port = argv[2];
+	my_port = argv[1];
 	
 	if (DEBUG) {
 		printf("DEBUG: Port number: %s\n", my_port);
